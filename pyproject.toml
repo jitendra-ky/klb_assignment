@@ -6,4 +6,9 @@ quote-style = "double"
 
 [tool.ruff.lint]
 select = ["ALL"]  # Enable all useful linting rules
-ignore = ['D104', 'EM101', 'TRY003']
+ignore = [
+    "D104",   # Missing docstring in public package
+    "EM101",  # Exception must not use a string literal, assign to variable first
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "E501",   # Line too long (handled by formatter)
+]
