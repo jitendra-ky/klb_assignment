@@ -1,0 +1,9 @@
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.format]  # Enables Ruff's formatter
+quote-style = "double"
+
+[tool.ruff.lint]
+select = ["ALL"]  # Enable all useful linting rules
+ignore = ['D104', 'EM101', 'TRY003']
