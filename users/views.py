@@ -1,11 +1,11 @@
 """Views for the users app."""
 
 from typing import ClassVar
-from urllib.request import Request
 
-from django.shortcuts import HttpResponse
+from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -56,8 +56,5 @@ class ProfileView(generics.RetrieveAPIView):
 
     def get(self, request: Request) -> Response:
         """Get the profile of the authenticated user."""
-        user = request.user
-        return Response({
-            "id": user.id,
-            "username": user.username,
-        })
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)

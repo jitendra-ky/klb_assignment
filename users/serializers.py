@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields: ClassVar = ["id", "username", "email", "password", "first_name", "last_name"]
         extra_kwargs: ClassVar = {
             "email": {"required": True},
-            "username": {"required": False},
+            "username": {"required": True},
             "password": {"write_only": True},
         }
 
