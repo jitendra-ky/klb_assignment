@@ -1,5 +1,6 @@
 [tool.ruff]
 target-version = "py312"
+exclude = ["users/migrations/*"]
 
 [tool.ruff.format]  # Enables Ruff's formatter
 quote-style = "double"
@@ -13,4 +14,5 @@ ignore = [
     "E501",   # Line too long (handled by formatter)
     "PT009",  # Use a regular `assert` instead of unittest-style ...
     "S101",   # Use of `assert` detected
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]

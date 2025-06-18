@@ -79,3 +79,46 @@ class ProfileViewTest(APITestCase):
         assert response.data["username"] == self.user_data["username"]
         assert response.data["email"] == self.user_data["email"]
         assert "password" not in response.data
+
+
+class TelegramRegisterViewTest(APITestCase):
+    """Tests for the TelegramRegisterView (Telegram user registration endpoint)."""
+
+    def setUp(self) -> None:
+        """Set up test data and client for Telegram registration."""
+        self.client = APIClient()
+        self.url = reverse("telegram-register")
+        self.valid_data = {
+            "telegram_id": 123456789,
+            "username": "telegramuser",
+            "first_name": "Tele",
+            "last_name": "Gram",
+            "language_code": "en",
+        }
+
+    def test_telegram_register_success(self) -> None:
+        """Test successful Telegram user registration."""
+        response = self.client.post(self.url, self.valid_data, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data["message"] == "Telegram user saved."
+
+    def test_telegram_register_missing_telegram_id(self) -> None:
+        """Test registration with missing telegram_id field."""
+        data = self.valid_data.copy()
+        data.pop("telegram_id")
+        response = self.client.post(self.url, data, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "error" in response.data
+        assert response.data["error"] == "telegram_id is required."
+
+    def test_telegram_register_duplicate(self) -> None:
+        """Test registration with duplicate telegram_id (should update, not error)."""
+        # First registration
+        response1 = self.client.post(self.url, self.valid_data, format="json")
+        assert response1.status_code == status.HTTP_201_CREATED
+        # Second registration with same telegram_id but different username
+        data2 = self.valid_data.copy()
+        data2["username"] = "newusername"
+        response2 = self.client.post(self.url, data2, format="json")
+        assert response2.status_code == status.HTTP_201_CREATED
+        assert response2.data["message"] == "Telegram user saved."

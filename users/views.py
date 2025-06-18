@@ -9,7 +9,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer
+from .models import TelegramUser
+from .serializers import TelegramUserSerializer, UserSerializer
 from .tasks import send_welcome_email
 
 
@@ -61,3 +62,27 @@ class ProfileView(generics.RetrieveAPIView):
         """Get the profile of the authenticated user."""
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TelegramRegisterView(APIView):
+    """View to handle registration or update of Telegram users."""
+
+    def post(self, request: Request) -> Response:
+        """Register or update a Telegram user."""
+        telegram_id = request.data.get("telegram_id")
+
+        if not telegram_id:
+            return Response({"error": "telegram_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            instance = TelegramUser.objects.get(telegram_id=telegram_id)
+            serializer = TelegramUserSerializer(instance, data=request.data, partial=True)
+        except TelegramUser.DoesNotExist:
+            serializer = TelegramUserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Telegram user saved."}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
