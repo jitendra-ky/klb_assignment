@@ -1,4 +1,4 @@
 Django==5.2.3
 ruff==0.9.6
 djangorestframework==3.16.0
-djangorestframework-simplejwt-5.5.0
+djangorestframework-simplejwt==5.5.0
