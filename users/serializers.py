@@ -3,6 +3,7 @@
 from typing import ClassVar
 
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from rest_framework import serializers
 
 
@@ -25,7 +26,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> User:
         """Create a new user instance."""
         # Handles user registration (with password hashing)
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        self.instance = user
+        self.send_welcome_mail()
+        return user
 
     def update(self, instance: User, validated_data: dict) -> User:
         """Update an existing user instance."""
@@ -42,3 +46,12 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+    def send_welcome_mail(self) -> None:
+        """Send welcome email to the user instance."""
+        send_mail(
+            subject="Welcome to klb_assignment",
+            message=f"Hi! {self.instance.username}\nYou are now a part of the klb family :)",
+            from_email="your_email@gmail.com",
+            recipient_list=[self.instance.email],
+        )
