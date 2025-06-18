@@ -3,7 +3,6 @@
 from typing import ClassVar
 
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from rest_framework import serializers
 
 
