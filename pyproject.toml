@@ -11,4 +11,6 @@ ignore = [
     "EM101",  # Exception must not use a string literal, assign to variable first
     "TRY003", # Avoid specifying long messages outside the exception class
     "E501",   # Line too long (handled by formatter)
+    "PT009",  # Use a regular `assert` instead of unittest-style ...
+    "S101",   # Use of `assert` detected
 ]
