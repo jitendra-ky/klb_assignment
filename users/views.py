@@ -14,8 +14,27 @@ from .serializers import UserSerializer
 
 # Create your views here.
 def index(request: Request) -> HttpResponse:
-    """Index view for the users app."""
-    return HttpResponse(f"Hello, world. You're at the users index. {request}")
+    """Index view for the users app.
+
+    API Endpoints:
+    1. GET    /                   - Index view (this page)
+    2. POST   /api/register/      - Register a new user (public)
+    3. GET    /api/profile/       - Get authenticated user's profile (protected)
+    4. POST   /api/token/         - Obtain JWT token (public)
+    5. POST   /api/token/refresh/ - Refresh JWT token (public)
+    """
+    return HttpResponse(
+        f"""{request.method} {request.path} - Users API Index View
+        <h2>Users API Endpoints</h2>
+        <ul>
+            <li><b>GET</b> <a href="/">/</a> - Index view (this page)</li>
+            <li><b>POST</b> <a href="/api/register/">/api/register/</a> - Register a new user (public)</li>
+            <li><b>GET</b> <a href="/api/profile/">/api/profile/</a> - Get authenticated user's profile (protected)</li>
+            <li><b>POST</b> <a href="/api/token/">/api/token/</a> - Obtain JWT token (public)</li>
+            <li><b>POST</b> <a href="/api/token/refresh/">/api/token/refresh/</a> - Refresh JWT token (public)</li>
+        </ul>
+        """,
+    )
 
 
 class RegisterView(APIView):
