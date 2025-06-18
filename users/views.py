@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import UserSerializer
+from .tasks import send_welcome_email
 
 
 # Create your views here.
@@ -44,7 +45,9 @@ class RegisterView(APIView):
         """Register a new user."""
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            # Send welcome email asynchronously
+            send_welcome_email.delay(user.email)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
