@@ -5,6 +5,8 @@ from typing import ClassVar
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from .models import TelegramUser
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User model."""
@@ -42,4 +44,22 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class TelegramUserSerializer(serializers.ModelSerializer):
+    """Serializer for the TelegramUser model."""
+
+    class Meta:
+        """Serializer for the TelegramUser model."""
+
+        model = TelegramUser
+        fields = ["telegram_id", "username", "first_name", "last_name", "language_code"]
+
+    def create(self, validated_data: dict) -> TelegramUser:
+        """Create or update a TelegramUser instance."""
+        telegram_id = validated_data["telegram_id"]
+        return TelegramUser.objects.update_or_create(
+            telegram_id=telegram_id,
+            defaults=validated_data,
+        )[0]
 

@@ -14,4 +14,5 @@ urlpatterns = [
     path("api/register/", views.RegisterView.as_view(), name="register"), # public endpoint
     path("api/profile/", views.ProfileView.as_view(), name="profile"), # protected endpoint
 
+    path("api/telegram/register/", views.TelegramRegisterView.as_view(), name="telegram-register"),
 ]
