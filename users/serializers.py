@@ -42,3 +42,4 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
